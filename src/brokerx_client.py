@@ -47,7 +47,7 @@ def account_exists(products, alias):
     
     for product in products:
 
-        if ( product['alias'] == alias ):
+        if ( product['alias'].upper() == alias.upper() ):
             return True
 
     return False
@@ -56,7 +56,7 @@ def select_product(products, alias):
     
     for product in products:
 
-        if ( product['alias'] == alias ):
+        if ( product['alias'].upper() == alias.upper() ):
             return product
 
     return {}
