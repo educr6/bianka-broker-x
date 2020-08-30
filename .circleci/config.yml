@@ -10,8 +10,8 @@ jobs:
       - image: circleci/python:3.6.4
     steps:
       - checkout
-      - run: pip install -r requirements.txt
-      - run: pip install -r requirements.txt
+      - run: pip install --user requirements.txt
+      - run: python -m pytest
 
          
 workflows:
