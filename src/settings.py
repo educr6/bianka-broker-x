@@ -1,4 +1,4 @@
 from os import environ
 
-SECRET_KEY = environ.get('SECRET_KEY')
-API_KEY = environ.get('API_KEY')
+COREX_BASE_URL=environ.get('COREX_BASE_URL')
+ENVIRONMENT=environ.get('ENVIRONMENT')

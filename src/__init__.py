@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
-from .brokerx_client import get_balance_of_account
+from .corex_client import CoreXClient
 
 def create_app():
     app = Flask(__name__)
@@ -14,12 +14,17 @@ def create_app():
     def index():
         return jsonify({'hello': "world"})
     
+    @app.route('/env')
+    def get_environment():
+        return jsonify({"ENV": app.config['ENVIRONMENT']})
+    
 
     @app.route('/getaccountbalance')
     def get_accout_balance():
 
         alias = request.args.get('alias')
-        monto = get_balance_of_account(2, alias)
+        corex_client = CoreXClient(app.config['COREX_BASE_URL'], 2)
+        monto = corex_client.get_balance_of_account(alias)
 
         return {
             "status": "OK",
