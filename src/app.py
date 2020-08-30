@@ -23,8 +23,7 @@ def create_app():
         return {
             "status": "OK",
             "message": "El balance en su cuenta titulada %s es de %s pesos" % (alias, monto),
-            "operation success": True
-        }
+            "operation success": True}
     
     return app
 
