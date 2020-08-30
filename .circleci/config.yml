@@ -6,12 +6,11 @@ orbs:
 
 jobs:
   build-and-test:
-    executor: python/default
     steps:
       - checkout
       - run: pip install -r requirements.txt
       - run: pip install -r requirements.txt
-      
+
          
 workflows:
   main:
