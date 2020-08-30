@@ -9,14 +9,10 @@ jobs:
     executor: python/default
     steps:
       - checkout
+      - run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
       
-      - run:
-        command: pip install -r requirements.txt
-        name: Install dependencies
-      
-      - run:
-          command: python -m pytest
-          name: Test
+         
 workflows:
   main:
     jobs:
