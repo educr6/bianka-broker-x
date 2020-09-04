@@ -31,4 +31,18 @@ def create_app():
             "message": "El balance en su cuenta titulada %s es de %s pesos" % (alias, monto),
             "operation success": True}
     
+
+
+    @app.route('/getcreditcardlimit')
+    def get_credit_card_limit():
+
+        alias = request.args.get('alias')
+        corex_client = CoreXClient(app.config['COREX_BASE_URL'], 2)
+        limit = corex_client.get_credit_card_limit(alias)
+
+        return {
+            "status": "OK",
+            "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
+            "operation success": True}
+    
     return app
