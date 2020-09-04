@@ -25,9 +25,34 @@ class CoreXClient:
         account_data = self.get_account_data(product)
 
         return account_data['monto']
+    
+
+    def get_credit_card_limit(self, alias):
+
+        accounts = self.get_credit_cards_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        product = self.select_product(accounts, alias)
+        credit_card_data = self.get_credit_card_data(product)
+
+        return credit_card_data['limiteCredito']
 
 
 
+    def get_credit_card_data(self, product):
+
+        url = self.api_url + "/api/tarjeta-credito/" + str(product['productoId'])
+        response = requests.get(url, verify=False)
+
+        if (response.status_code != OK_STATUS):
+            return {}
+        
+        response = self.read_response(response)
+        return response['result']
+
+    
     def get_account_data(self, product):
 
         url = self.api_url + "/api/cuenta-ahorro/" + str(product['productoId'])
@@ -45,6 +70,18 @@ class CoreXClient:
     def get_accounts_from_client(self):
 
         url = self.api_url + '/api/producto/cliente/' + str(self.client_id) + '/tipo-producto/1'
+        response = requests.get( url, verify=False)
+
+        if (response.status_code != OK_STATUS):
+            return []
+
+        response = self.read_response(response)
+        return response['result']
+    
+
+    def get_credit_cards_from_client(self):
+
+        url = self.api_url + '/api/producto/cliente/' + str(self.client_id) + '/tipo-producto/2'
         response = requests.get( url, verify=False)
 
         if (response.status_code != OK_STATUS):
