@@ -58,4 +58,17 @@ def create_app():
             "message": "El credito disponible de su tarjeta de crédito %s es de %s pesos" % (alias, available_credit),
             "operation success": True}
     
+
+    @app.route('/getcreditcardconsumedcredit')
+    def get_credit_card_consumed_credit():
+
+        alias = request.args.get('alias')
+        corex_client = CoreXClient(app.config['COREX_BASE_URL'], 2)
+        consumed_credit = corex_client.get_credit_card_consumed_credit(alias)
+
+        return {
+            "status": "OK",
+            "message": "El credito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
+            "operation success": True}
+    
     return app
