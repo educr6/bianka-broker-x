@@ -1,8 +1,5 @@
 
 from flask import Flask
-from flask import request
-from flask import jsonify
-from .corex_client import CoreXClient
 from . import routes
 
 def create_app():

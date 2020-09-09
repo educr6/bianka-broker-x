@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app
 from flask import jsonify
 from flask import request
-from ..corex_client import CoreXClient
+from ..corex_clients.credit_card import CreditCardsCoreXClient
 
 
 credit_card = Blueprint('credit_card', __name__)
@@ -12,20 +12,21 @@ credit_card = Blueprint('credit_card', __name__)
 def get_credit_card_limit():
 
     alias = request.args.get('alias')
-    corex_client = CoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     limit = corex_client.get_credit_card_limit(alias)
 
     return {
         "status": "OK",
         "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
         "operation success": True}
+
     
 
 @credit_card.route('/getcreditcardavailablecredit')
 def get_credit_card_available_credit():
 
     alias = request.args.get('alias')
-    corex_client = CoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     available_credit = corex_client.get_credit_card_available_credit(alias)
 
     return {
@@ -34,15 +35,17 @@ def get_credit_card_available_credit():
         "operation success": True}
     
 
+
 @credit_card.route('/getcreditcardconsumedcredit')
 def get_credit_card_consumed_credit():
 
     alias = request.args.get('alias')
-    corex_client = CoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     consumed_credit = corex_client.get_credit_card_consumed_credit(alias)
 
     return {
         "status": "OK",
         "message": "El credito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
         "operation success": True}
+        
     

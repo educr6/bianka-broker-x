@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app
 from flask import jsonify
 from flask import request
-from ..corex_client import CoreXClient
+from ..corex_clients.account import AccountsCoreXClient
 
 
 account = Blueprint('account', __name__)
@@ -11,7 +11,7 @@ account = Blueprint('account', __name__)
 def get_accout_balance():
 
     alias = request.args.get('alias')
-    corex_client = CoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     monto = corex_client.get_balance_of_account(alias)
 
     return {
