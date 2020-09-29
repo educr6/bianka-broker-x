@@ -47,5 +47,18 @@ def get_credit_card_consumed_credit():
         "status": "OK",
         "message": "El credito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
         "operation success": True}
+
+
+@credit_card.route('/getcreditcardminimumpayment')
+def get_credit_card_minimum_payment():
+
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    minimum_payment = corex_client.get_credit_card_minimum_payment(alias)
+
+    return {
+        "status": "OK",
+        "message": "El pago minimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
+        "operation success": True}
         
     
