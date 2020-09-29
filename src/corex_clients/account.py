@@ -20,32 +20,32 @@ class AccountsCoreXClient (CoreXClient):
         product = self.select_product_by_alias(accounts, alias)
         account_data = self.get_account_data(product)
 
-        return account_data['monto']
+        return account_data['amount']
     
 
     def get_accounts_from_client(self):
 
-        url = self.api_url + '/api/producto/cliente/' + str(self.client_id) + '/tipo-producto/' + str(self._product_type)
+        url = self.api_url + '/api/product/client/' + str(self.client_id) + '/product-type/' + str(self._product_type)
         response = requests.get( url, verify=False)
 
         if (response.status_code != 200):
             return []
 
         response = self.read_response(response)
-        return response['result']
+        return response
 
 
     
     def get_account_data(self, product):
 
-        url = self.api_url + "/api/cuenta-ahorro/" + str(product['productoId'])
+        url = self.api_url + "/api/savings-account/" + str(product['productId'])
         response = requests.get(url, verify=False)
 
         if (response.status_code != 200):
             return {}
         
         response = self.read_response(response)
-        return response['result']
+        return response
     
 
 

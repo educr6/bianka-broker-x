@@ -20,7 +20,7 @@ class CreditCardsCoreXClient (CoreXClient):
             product = self.select_product_by_alias(accounts, alias)
             credit_card_data = self.get_credit_card_data(product)
 
-            return credit_card_data['limiteCredito']
+            return credit_card_data['creditLimit']
 
         
     def get_credit_card_available_credit(self, alias):
@@ -46,7 +46,7 @@ class CreditCardsCoreXClient (CoreXClient):
         product = self.select_product_by_alias(accounts, alias)
         credit_card_data = self.get_credit_card_data(product)
 
-        return ( credit_card_data['limiteCredito'] - credit_card_data['balance'] )
+        return ( credit_card_data['creditLimit'] - credit_card_data['balance'] )
     
 
     def get_credit_card_minimum_payment(self, alias):
