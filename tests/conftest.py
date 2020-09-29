@@ -8,7 +8,8 @@ import os
 sys.path.append(os.path.abspath('../src'))
 
 from src import create_app as flask_app
-from src.corex_client import CoreXClient
+from src.corex_clients.credit_card import CreditCardsCoreXClient
+from src.corex_clients.account import AccountsCoreXClient
 
 
 @pytest.fixture
@@ -22,5 +23,9 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture
-def corex_client(app):
-    return CoreXClient(app.config['COREX_BASE_URL'], 2)
+def account_corex_client(app):
+    return AccountsCoreXClient(app.config['COREX_BASE_URL'], 2)
+
+@pytest.fixture
+def credit_card_corex_client(app):
+    return CreditCardsCoreXClient(app.config['COREX_BASE_URL'], 2)
