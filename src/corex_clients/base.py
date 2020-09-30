@@ -18,7 +18,7 @@ class CoreXClient:
         
         for product in products:
 
-            if ( product['alias'].upper() == alias.upper() ):
+            if ( self.is_alias_same(product['alias'], alias) ):
                 return True
 
         return False
@@ -27,10 +27,25 @@ class CoreXClient:
         
         for product in products:
 
-            if ( product['alias'].upper() == alias.upper() ):
+            if ( self.is_alias_same(product['alias'], alias) ):
                 return product
 
         return {}
+    
+    def is_alias_same(self, product_alias, search_alias):
+
+        product_alias = product_alias.upper()
+        search_alias = search_alias.upper()
+
+        if ( product_alias == search_alias ):
+            return True
+        
+        if ( search_alias in product_alias ):
+            return True
+        
+        return False
+
+
 
 
     def read_response(self, response):
