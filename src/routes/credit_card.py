@@ -60,5 +60,21 @@ def get_credit_card_minimum_payment():
         "status": "OK",
         "message": "El pago minimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
         "operation success": True}
+
+
+
+@credit_card.route('/getcreditcardcutpayment')
+def get_credit_card_cut_payment():
+
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    cut_payment = corex_client.get_credit_card_cut_payment(alias)
+
+    return {
+        "status": "OK",
+        "message": "El pago al corte de su tarjeta de crédito %s es de %s pesos" % (alias, cut_payment),
+        "operation success": True}
+
+
         
     
