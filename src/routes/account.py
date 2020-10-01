@@ -14,6 +14,15 @@ def get_accout_balance():
     corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     monto = corex_client.get_balance_of_account(alias)
 
+    if (monto == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "Usted no posee una cuenta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
     return {
         "status": "OK",
         "message": "El balance en su cuenta titulada %s es de %s pesos" % (alias, monto),
