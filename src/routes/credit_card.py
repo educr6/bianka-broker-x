@@ -1,6 +1,8 @@
 from flask import Blueprint, current_app
 from flask import jsonify
 from flask import request
+from flask import Response
+
 from ..corex_clients.credit_card import CreditCardsCoreXClient
 
 
@@ -14,6 +16,16 @@ def get_credit_card_limit():
     alias = request.args.get('alias')
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     limit = corex_client.get_credit_card_limit(alias)
+
+    if (limit == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
 
     return {
         "status": "OK",
@@ -29,6 +41,16 @@ def get_credit_card_available_credit():
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     available_credit = corex_client.get_credit_card_available_credit(alias)
 
+    if (available_credit == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+
     return {
         "status": "OK",
         "message": "El credito disponible de su tarjeta de crédito %s es de %s pesos" % (alias, available_credit),
@@ -43,6 +65,16 @@ def get_credit_card_consumed_credit():
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     consumed_credit = corex_client.get_credit_card_consumed_credit(alias)
 
+    if (consumed_credit == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+
     return {
         "status": "OK",
         "message": "El credito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
@@ -56,9 +88,18 @@ def get_credit_card_minimum_payment():
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     minimum_payment = corex_client.get_credit_card_minimum_payment(alias)
 
+    if (minimum_payment == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
     return {
         "status": "OK",
-        "message": "El pago minimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
+        "message": "No pudimos encontrar su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
         "operation success": True}
 
 
@@ -70,10 +111,21 @@ def get_credit_card_cut_payment():
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     cut_payment = corex_client.get_credit_card_cut_payment(alias)
 
+
+    if (cut_payment == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
     return {
         "status": "OK",
         "message": "El pago al corte de su tarjeta de crédito %s es de %s pesos" % (alias, cut_payment),
-        "operation success": True}
+        "operation success": True
+        }
 
 
         
