@@ -39,3 +39,20 @@ def test_get_date_from_transaction_in_phrase3():
     expected = '1 de enero'
 
     assert expected == phrase_builders.get_date_from_transaction_in_phrase(mock_transaction)
+
+
+def create_single_transaction_phrase1():
+
+    mock_transaction = {"transactionDate": '2020-01-01T20:52:24.897', "amount": 15000.0, "description": "Supermercados Bravo"}
+    expected = "Supermercados Bravo, en la fecha 1 de enero, por un monto de 15000.0 pesos"
+
+    assert expected == phrase_builders.create_phrase_for_single_transaction(mock_transaction)
+
+def create_single_transaction_phrase2():
+
+    mock_transaction = {"transactionDate": '2020-03-20T20:52:24.897', "amount": 300.0, "description": "Amazon"}
+    expected = "Amazon, en la fecha 20 de marzo, por un monto de 300.0 pesos"
+
+    assert expected == phrase_builders.create_phrase_for_single_transaction(mock_transaction)
+
+
