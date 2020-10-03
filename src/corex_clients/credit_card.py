@@ -98,3 +98,17 @@ class CreditCardsCoreXClient (CoreXClient):
 
         response = self.read_response(response)
         return response
+
+
+    
+    def get_credit_card_transactions(self, alias, number_of_transactions):
+
+        credit_cards = self.get_credit_cards_from_client()
+
+        if (self.account_exists(credit_cards, alias) == False):
+            return None
+        
+        card = self.select_product_by_alias(credit_cards, alias)
+
+
+        transactions = self.get_product_transactions(card)

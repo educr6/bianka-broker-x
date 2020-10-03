@@ -8,6 +8,10 @@ class CoreXClient:
 
     api_url = ''
     client_id = ''
+    product_type_enum = {
+        "SavingsAccount": 1,
+        "CreditCard": 2
+    }
 
     def __init__(self, api_url, client_id):
         self.api_url = api_url
@@ -44,8 +48,30 @@ class CoreXClient:
             return True
         
         return False
+    
+    def translate_product_type(self, product_type):
+        
+        if (product_type in self.product_type_enum):
+            return self.product_type_enum[product_type]
+        
+        return 0
+    
+    def get_product_transactions(self, product):
 
+        product_type = self.translate_product_type(product["productType"])
+        
+        url = self.api_url + '/api/historical-transaction/product/%s' % str(product_type)
+        response = requests.get(url, verify=False)
 
+        if (response.status_code != 200):
+            return []
+        
+        response = self.read_response(response)
+        return response
+        
+
+        
+    
 
 
     def read_response(self, response):
