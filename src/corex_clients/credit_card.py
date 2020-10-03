@@ -1,4 +1,5 @@
 from .base import CoreXClient
+from src.phrase_builders import transactions as transphraseBuilder
 import requests
 
 class CreditCardsCoreXClient (CoreXClient):
@@ -101,7 +102,7 @@ class CreditCardsCoreXClient (CoreXClient):
 
 
     
-    def get_credit_card_transactions(self, alias, number_of_transactions):
+    def get_credit_card_transactions(self, alias):
 
         credit_cards = self.get_credit_cards_from_client()
 
@@ -112,3 +113,4 @@ class CreditCardsCoreXClient (CoreXClient):
 
 
         transactions = self.get_product_transactions(card)
+        return transactions

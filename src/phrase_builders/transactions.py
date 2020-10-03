@@ -1,9 +1,15 @@
 from datetime import datetime
 
-def create_transaction_phrase(transactions_list, number_of_transactions):
+
+
+months_in_spanish = {1: "enero", 2: "febrero", 3: "marzo", 
+4: "abril", 5: "mayo", 6: "junio", 7: "julio", 8:"agosto",
+ 9:"septiembre", 10:"octubre", 11:"noviembre", 12:"diciembre"}
+
+def create_transactions_phrase(transactions_list, number_of_transactions):
 
     complete_phrase = ""
-    initial_phrase = "Estas son sus ultimas %s transacciones: " % number_of_transactions
+    initial_phrase = "Estas son sus últimas %s transacciones: " % number_of_transactions
 
     selected_transactions = trim_transactions(transactions_list, number_of_transactions)
     transaction_phrases = group_transaction_phrases(selected_transactions)
@@ -11,14 +17,6 @@ def create_transaction_phrase(transactions_list, number_of_transactions):
     complete_phrase = initial_phrase + "\n" + transaction_phrases
 
     return complete_phrase
-
-
-
- 
-
-months_in_spanish = {1: "enero", 2: "febrero", 3: "marzo", 
-4: "abril", 5: "mayo", 6: "junio", 7: "julio", 8:"agosto",
- 9:"septiembre", 10:"octubre", 11:"noviembre", 12:"diciembre"}
 
 
 def trim_transactions(transaction_list, number_of_transactions):
