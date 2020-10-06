@@ -3,7 +3,9 @@ from flask import jsonify
 from flask import request
 from flask import Response
 
+
 from ..corex_clients.credit_card import CreditCardsCoreXClient
+from ..phrase_builders import transactions as transactionsPhraseBuilder
 
 
 credit_card = Blueprint('credit_card', __name__)
@@ -124,6 +126,34 @@ def get_credit_card_cut_payment():
     return {
         "status": "OK",
         "message": "El pago al corte de su tarjeta de crédito %s es de %s pesos" % (alias, cut_payment),
+        "operation success": True
+        }
+    
+
+@credit_card.route('/getcreditcardtransactions')
+def get_credit_card_transactions():
+
+    alias = request.args.get('alias')
+    number_of_transactions = int(request.args.get('numberoftransactions'))
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    transactions = corex_client.get_credit_card_transactions(alias)
+
+   
+    
+    if (transactions == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+    
+    message = transactionsPhraseBuilder.create_transactions_phrase(transactions, number_of_transactions)
+
+    return {
+        "status": "OK",
+        "message": message,
         "operation success": True
         }
 

@@ -85,4 +85,31 @@ def test_is_alias_same4(base_corex_client):
     assert base_corex_client.is_alias_same(product_alias, search_alias) == expected_answer
 
 
+def test_corex_client_product_type_detection1(base_corex_client):
+
+    productType = "SavingsAccount"
+    expected = 1
+
+    assert expected == base_corex_client.translate_product_type(productType)
+
+def test_corex_client_product_type_detection2(base_corex_client):
+
+    productType = "CreditCard"
+    expected = 2
+
+    assert expected == base_corex_client.translate_product_type(productType)
+
+def test_corex_client_product_type_detection3(base_corex_client):
+
+    productType = "CreditCards"
+    expected = 0
+
+    assert expected == base_corex_client.translate_product_type(productType)
+
+def test_corex_client_product_type_detection4(base_corex_client):
+
+    productType = "SavingAccount"
+    expected = 0
+
+    assert expected == base_corex_client.translate_product_type(productType)
 
