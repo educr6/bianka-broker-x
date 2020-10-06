@@ -58,9 +58,8 @@ class CoreXClient:
     
     def get_product_transactions(self, product):
 
-        product_type = self.translate_product_type(product["productType"])
         
-        url = self.api_url + '/api/historical-transaction/product/%s' % str(product_type)
+        url = self.api_url + '/api/historical-transaction/product/%s' % str(product["productId"])
         response = requests.get(url, verify=False)
 
         if (response.status_code != 200):

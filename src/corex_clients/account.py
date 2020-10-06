@@ -47,6 +47,18 @@ class AccountsCoreXClient (CoreXClient):
         response = self.read_response(response)
         return response
     
+    def get_account_transactions(self, alias):
+
+        accounts = self.get_accounts_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        account = self.select_product_by_alias(accounts, alias)
+
+
+        transactions = self.get_product_transactions(account)
+        return transactions
 
 
 
