@@ -59,6 +59,18 @@ class AccountsCoreXClient (CoreXClient):
 
         transactions = self.get_product_transactions(account)
         return transactions
+        
+    
+    def get_account_by_alias(self, alias):
+        
+        accounts = self.get_accounts_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        account = self.select_product_by_alias(accounts, alias)
+        return account
+
     
     def transfer_money_to_beneficiary(self, transfer_petition):
         return {}

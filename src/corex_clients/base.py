@@ -26,6 +26,7 @@ class CoreXClient:
                 return True
 
         return False
+        
 
     def select_product_by_alias(self, products, alias):
         
