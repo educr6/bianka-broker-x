@@ -59,6 +59,9 @@ class AccountsCoreXClient (CoreXClient):
 
         transactions = self.get_product_transactions(account)
         return transactions
+    
+    def transfer_money_to_beneficiary(self, transfer_petition):
+        return {}
 
 
 

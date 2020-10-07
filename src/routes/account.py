@@ -56,3 +56,32 @@ def get_account_transactions():
         "message": message,
         "operation success": True
         }
+    
+@account.route('/transfermoneytobeneficiary')
+def transfer_money_to_beneficiary():
+
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    transfer_petition = {}
+
+    transfer_petition["accountAlias"] = request.args.get('alias')
+    transfer_petition["beneficiary"]  = request.args.get('beneficiary')
+    transfer_petition["amount"]       = float( request.args.get('amount') )
+
+
+
+    transfer_transaction = corex_client.transfer_money_to_beneficiary(transfer_petition)
+
+    if (transfer_transaction["success"] != True):
+        content =  {
+            
+            "message": transfer_transaction["message"],
+            "operation success": False
+        }
+
+        return content, 400
+    
+    return {
+        "status": "OK",
+        "message": transfer_transaction,
+        "operation success": True
+        }
