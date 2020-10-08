@@ -1,5 +1,6 @@
 from .base import CoreXClient
 import requests
+import json
 
 class AccountsCoreXClient (CoreXClient):
 
@@ -84,22 +85,24 @@ class AccountsCoreXClient (CoreXClient):
         
         beneficiaryProduct = self.get_beneficiary_product(transfer_petition["beneficiary"])
 
-        if (beneficiaryProduct == None):
+        if (beneficiaryProduct == {}):
             return {
                 "success":  False,
                 "message": "No pudimos encontrar entre sus beneficiarios a %s" % transfer_petition["beneficiary"]
             }
         
-        transfer_request_body = {
+       
+        data = {
             "productSourceId": sourceProduct["productId"],
             "productTargetId": beneficiaryProduct["productId"],
             "amount": transfer_petition["amount"],
             "note": "Esta transferencia se hizo a traves de Bianka"
         }
 
-        url = self.api_url + "/api/transactions"
+        url = self.api_url + "/api/transaction"
 
-        response = requests.post(url, data=transfer_request_body, verify=False)
+        response = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"}, verify=False)
+
 
         if (response.status_code != 200) :
             return {
@@ -110,7 +113,7 @@ class AccountsCoreXClient (CoreXClient):
 
         response = self.read_response(response)
 
-        result = {"success": "True"}
+        result = {"success": True, "message": "Transaccion sometida"}
         result.update(response)
 
         return result

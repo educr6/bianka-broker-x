@@ -68,7 +68,7 @@ class CoreXClient:
         
         response = self.read_response(response)
         return response
-        
+
     
     def get_beneficiary_product(self, beneficiary_alias):
 
@@ -90,8 +90,10 @@ class CoreXClient:
 
     def get_beneficiary_list(self):
         
-        url = self.api_url + "/api/beneficiary/client/%s" + str(self.client_id)
+        url = self.api_url + "/api/beneficiary/client/%s" % str(self.client_id)
         response = requests.get(url, verify=False)
+
+      
 
         if (response.status_code != 200):
             return []
