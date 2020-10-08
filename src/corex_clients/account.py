@@ -59,7 +59,7 @@ class AccountsCoreXClient (CoreXClient):
 
         transactions = self.get_product_transactions(account)
         return transactions
-        
+
     
     def get_account_by_alias(self, alias):
         
@@ -73,6 +73,25 @@ class AccountsCoreXClient (CoreXClient):
 
     
     def transfer_money_to_beneficiary(self, transfer_petition):
+
+        sourceProduct = self.get_account_by_alias(transfer_petition["accountAlias"])
+
+        if (sourceProduct == None):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus cuentas la titulada %s" % transfer_petition["accountAlias"]
+            }
+        
+        beneficiaryProduct = self.get_beneficiary_product(transfer_petition["beneficiary"])
+
+        if (beneficiaryProduct == None):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus beneficiarios a %s" % transfer_petition["beneficiary"]
+            }
+
+
+
         return {}
 
 
