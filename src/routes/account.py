@@ -20,7 +20,7 @@ def get_accout_balance():
         content =  {
             "status": "BAD REQUEST",
             "message": "Usted no posee una cuenta titulada %s" % alias,
-            "operation success": False
+            "operation_success": False
         }
 
         return content, 400
@@ -28,7 +28,7 @@ def get_accout_balance():
     return {
         "status": "OK",
         "message": "El balance en su cuenta titulada %s es de %s pesos" % (alias, monto),
-        "operation success": True}
+        "operation_success": True}
 
 @account.route('/getaccounttransactions')
 def get_account_transactions():
@@ -44,7 +44,7 @@ def get_account_transactions():
         content =  {
             "status": "BAD REQUEST",
             "message": "No pudimos encontrar su cuenta titulada %s" % alias,
-            "operation success": False
+            "operation_success": False
         }
 
         return content, 400
@@ -54,7 +54,7 @@ def get_account_transactions():
     return {
         "status": "OK",
         "message": message,
-        "operation success": True
+        "operation_success": True
         }
     
 @account.route('/transfermoneytobeneficiary', methods=['POST'])
@@ -63,19 +63,13 @@ def transfer_money_to_beneficiary():
     corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
     transfer_petition = request.json
 
-    #transfer_petition["accountAlias"] = request.args.get('alias')
-    #transfer_petition["beneficiary"]  = request.args.get('beneficiary')
-    #transfer_petition["amount"]       = float( request.args.get('amount') )
-
-
-
     transfer_transaction = corex_client.transfer_money_to_beneficiary(transfer_petition)
 
     if (transfer_transaction["success"] != True):
         content =  {
             
             "message": transfer_transaction["message"],
-            "operation success": False
+            "operation_success": False
         }
 
         return content, 400
@@ -89,5 +83,28 @@ def transfer_money_to_beneficiary():
         "message": "Favor indique diga su clave #%s" % key_number,
         "keyNumber": key_number,
         "current_operation_id": transfer_transaction["rowUiDTransaction"],
-        "operation success": True
+        "operation_success": True
+        }
+
+@account.route('/completetransfertobeneficiary', methods=['POST'])
+def complete_transfer_to_beneficiary():
+
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    complete_transfer_petition = request.json
+
+    complete_transfer_petition = corex_client.complete_transfer_to_beneficiary(complete_transfer_petition)
+
+    if (complete_transfer_petition["success"] != True):
+        
+        content =  {
+            "message": complete_transfer_petition["message"],
+            "operation_success": False
+        }
+
+        return content, 400
+    
+   
+    return {
+        "message": "Su transferencia ha sido completada.",
+        "operation_success": True
         }

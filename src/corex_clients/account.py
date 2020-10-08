@@ -117,6 +117,28 @@ class AccountsCoreXClient (CoreXClient):
         result.update(response)
 
         return result
+    
+    def complete_transfer_to_beneficiary(self, complete_transfer_petition):
+
+        operation_id = complete_transfer_petition["operation_id"]
+        key = complete_transfer_petition["key"]
+
+        url = self.api_url + "/api/transaction/rowuid/%s/key/%s" % (operation_id, key)
+        response = requests.post(url, data={}, verify=False)
+
+        response_content = self.read_response(response)
+
+        if(response.status_code != 200):
+
+            print ("EL FALLO SE VE DE ESTA FORMA", response_content)
+
+            return {
+                "success": False,
+                "message": response_content["Message"]
+            }
+        
+
+        return {"success": True}
 
 
         
