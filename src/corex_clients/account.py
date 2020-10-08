@@ -89,10 +89,37 @@ class AccountsCoreXClient (CoreXClient):
                 "success":  False,
                 "message": "No pudimos encontrar entre sus beneficiarios a %s" % transfer_petition["beneficiary"]
             }
+        
+        transfer_request_body = {
+            "productSourceId": sourceProduct["productId"],
+            "productTargetId": beneficiaryProduct["productId"],
+            "amount": transfer_petition["amount"],
+            "note": "Esta transferencia se hizo a traves de Bianka"
+        }
+
+        url = self.api_url + "/api/transactions"
+
+        response = requests.post(url, data=transfer_request_body, verify=False)
+
+        if (response.status_code != 200) :
+            return {
+                "success": False,
+                "message": "Hubo un error al intentar la transaccion"
+            }
+        
+
+        response = self.read_response(response)
+
+        result = {"success": "True"}
+        result.update(response)
+
+        return result
 
 
+        
 
-        return {}
+
+           
 
 
 

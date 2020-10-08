@@ -68,6 +68,7 @@ class CoreXClient:
         
         response = self.read_response(response)
         return response
+        
     
     def get_beneficiary_product(self, beneficiary_alias):
 
