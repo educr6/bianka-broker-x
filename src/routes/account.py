@@ -80,7 +80,7 @@ def transfer_money_to_beneficiary():
     
     return {
         "status": "OK",
-        "message": "Favor indique diga su clave #%s" % key_number,
+        "message": "Favor indique su clave #%s" % key_number,
         "keyNumber": key_number,
         "current_operation_id": transfer_transaction["rowUiDTransaction"],
         "operation_success": True
