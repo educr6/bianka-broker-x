@@ -20,7 +20,9 @@ def create_transactions_phrase(transactions_list, number_of_transactions):
 
 
 def trim_transactions(transaction_list, number_of_transactions):
-    return transaction_list[:number_of_transactions]
+    result = transaction_list[-number_of_transactions:]
+    result.reverse()
+    return result
 
 def create_phrase_for_single_transaction(transaction):
 
