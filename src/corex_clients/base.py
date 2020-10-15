@@ -27,6 +27,7 @@ class CoreXClient:
 
         return False
 
+
     def select_product_by_alias(self, products, alias):
         
         for product in products:
@@ -67,7 +68,43 @@ class CoreXClient:
         
         response = self.read_response(response)
         return response
+
+    
+    def get_beneficiary_product(self, beneficiary_alias):
+
+        beneficiary_list = self.get_beneficiary_list()
+
+        if (beneficiary_list == []):
+            return {}
         
+        for beneficiary in beneficiary_list:
+
+            if ( self.is_alias_same(beneficiary["alias"], beneficiary_alias) ):
+                return beneficiary["product"]
+        
+        return {} 
+            
+
+        
+    
+
+    def get_beneficiary_list(self):
+        
+        url = self.api_url + "/api/beneficiary/client/%s" % str(self.client_id)
+        response = requests.get(url, verify=False)
+
+      
+
+        if (response.status_code != 200):
+            return []
+        
+        response = self.read_response(response)
+        return response
+        
+
+
+
+
 
         
     
