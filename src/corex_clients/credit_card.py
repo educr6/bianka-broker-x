@@ -43,41 +43,27 @@ class CreditCardsCoreXClient (CoreXClient):
             dt_object = datetime.strptime(date_string, '%Y-%m-%d')
             
             currentDate = datetime.now()
-            newCutDate = get_cut_date(dt_object, daysLimitPayment,  currentDate)
+            newCutDate = self.get_cut_date(dt_object, daysLimitPayment,  currentDate)
             return (newCutDate - currentDate).days
 
 
-def get_cut_date(self, cutDate, daysLimitPayment, currentDate):
-      diferenceMonths = get_month_between_two_date(cutDate, currentDate)
-      newCutDate = cutDate + relativedelta(months=diferenceMonths)
-      newCutDate = newCutDate + timedelta(days=daysLimitPayment)
-
-      totaldays = (newCutDate - currentDate).days
-
-      if (totaldays < 0):
-          return newCutDate + relativedelta(months=1)
-      else:
-          return newCutDate
-
-def get_month_between_two_date(self, start_date, end_date):
-  return (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month)
-
-
-
-            return 
-    def get_cut_date(self, cutDate, daysLimitPayment):
-        diferenceMonths = (datetime.now() - cutDate).months
-        newCutDate = cutdate + timedelta(months=diferenceMonths)
+    def get_cut_date(self, cutDate, daysLimitPayment, currentDate):
+        diferenceMonths = self.get_month_between_two_date(cutDate, currentDate)
+        newCutDate = cutDate + relativedelta(months=diferenceMonths)
         newCutDate = newCutDate + timedelta(days=daysLimitPayment)
 
-        totaldays = (datetime.now() - cutDate).days
-        if (totaldays < 0):
-            newCutDate = newCutDate + timedelta(months=1)
-            return (datetime.now() - cutDate).days
-        else
-            return totaldays
-        
+        totaldays = (newCutDate - currentDate).days
 
+        if (totaldays < 0):
+            return newCutDate + relativedelta(months=1)
+        else:
+            return newCutDate
+
+
+    def get_month_between_two_date(self, start_date, end_date):
+        return (end_date.year - start_date.year) * 12 + (end_date.month - start_date.month)
+
+    
         
     def get_credit_card_available_credit(self, alias):
 

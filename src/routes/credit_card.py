@@ -39,9 +39,9 @@ def getmissingdays():
 
     alias = request.args.get('alias')
     corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
-    limit = corex_client.get_missing_days(alias)
+    missing_days = corex_client.get_missing_days(alias)
 
-    if (limit == None):
+    if (missing_days == None):
         content =  {
             "status": "BAD REQUEST",
             "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
@@ -53,7 +53,7 @@ def getmissingdays():
 
     return {
         "status": "OK",
-        "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
+        "message": "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (missing_days, alias),
         "operation success": True}
 
 
