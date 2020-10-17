@@ -22,6 +22,17 @@ class CreditCardsCoreXClient (CoreXClient):
             credit_card_data = self.get_credit_card_data(product)
 
             return credit_card_data['creditLimit']
+    
+    def get_missing_days(self, alias):
+            accounts = self.get_credit_cards_from_client()
+
+            if (self.account_exists(accounts, alias) == False):
+                return None
+            
+            product = self.select_product_by_alias(accounts, alias)
+            credit_card_data = self.get_credit_card_data(product)
+
+            return credit_card_data['missingDay']
 
         
     def get_credit_card_available_credit(self, alias):

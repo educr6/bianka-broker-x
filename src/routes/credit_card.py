@@ -34,7 +34,29 @@ def get_credit_card_limit():
         "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
         "operation success": True}
 
-    
+@credit_card.route('/getmissingdays')
+def getmissingdays():
+
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    limit = corex_client.get_missing_days(alias)
+
+    if (limit == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+
+    return {
+        "status": "OK",
+        "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
+        "operation success": True}
+
+
 
 @credit_card.route('/getcreditcardavailablecredit')
 def get_credit_card_available_credit():
