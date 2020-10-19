@@ -53,7 +53,7 @@ def getmissingdays():
     if (missing_days == 1):
         speak_output = "A usted le falta  solo un día para pagar su tarjeta de crédito %s" % alias
     else:
-        speak_output: "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (missing_days, alias)
+        speak_output = "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (missing_days, alias)
 
 
     return {
