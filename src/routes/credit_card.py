@@ -49,11 +49,16 @@ def getmissingdays():
         }
 
         return content, 400
+    
+    if (missing_days == 1):
+        speak_output = "A usted le falta  solo un día para pagar su tarjeta de crédito %s" % alias
+    else:
+        speak_output = "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (missing_days, alias)
 
 
     return {
         "status": "OK",
-        "message": "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (missing_days, alias),
+        "message": speak_output,
         "operation success": True}
 
 
