@@ -118,6 +118,54 @@ class AccountsCoreXClient (CoreXClient):
 
         return result
     
+
+
+    def transfer_money_between_own_accounts(self, transfer_petition):
+
+        sourceProduct = self.get_account_by_alias(transfer_petition["sourceAccountAlias"])
+
+        if (sourceProduct == None):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus cuentas la titulada %s" % transfer_petition["sourceAccountAlias"]
+            }
+        
+        targetProduct = self.get_account_by_alias(transfer_petition["targetAccountAlias"])
+
+        if (targetProduct == {}):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus cuentas la titulada %s" % transfer_petition["targetAccountAlias"]
+            }
+        
+       
+        data = {
+            "productSourceId": sourceProduct["productId"],
+            "productTargetId": targetProduct["productId"],
+            "amount": transfer_petition["amount"],
+            "note": "Esta transferencia se hizo a traves de Bianka"
+        }
+
+        url = self.api_url + "/api/transaction"
+
+        response = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"}, verify=False)
+
+
+        if (response.status_code != 200) :
+            return {
+                "success": False,
+                "message": "Hubo un error al intentar la transaccion"
+            }
+        
+
+        response = self.read_response(response)
+
+        result = {"success": True, "message": "Transaccion sometida"}
+        result.update(response)
+
+        return result
+
+    
     def complete_transfer_to_beneficiary(self, complete_transfer_petition):
 
         operation_id = complete_transfer_petition["operation_id"]

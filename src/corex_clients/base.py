@@ -39,8 +39,11 @@ class CoreXClient:
     
     def is_alias_same(self, product_alias, search_alias):
 
-        product_alias = product_alias.upper()
-        search_alias = search_alias.upper()
+        product_alias = product_alias.lower()
+        search_alias = search_alias.lower()
+
+        product_alias = self.remove_tildes(product_alias)
+        search_alias  = self.remove_tildes(search_alias)
 
         if ( product_alias == search_alias ):
             return True
@@ -100,6 +103,18 @@ class CoreXClient:
         
         response = self.read_response(response)
         return response
+
+
+    
+    def remove_tildes(self, alias):
+
+        new_alias = alias.replace("á", "a")
+        new_alias = new_alias.replace("é", "e")
+        new_alias = new_alias.replace("í", "i")
+        new_alias = new_alias.replace("ó", "o")
+        new_alias = new_alias.replace("ú", "u")
+
+        return new_alias
         
 
 

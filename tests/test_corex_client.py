@@ -84,6 +84,15 @@ def test_is_alias_same4(base_corex_client):
 
     assert base_corex_client.is_alias_same(product_alias, search_alias) == expected_answer
 
+def test_is_alias_same5(base_corex_client):
+
+    product_alias = "Nomina"
+    search_alias = "nómina"
+
+    expected_answer = True
+
+    assert base_corex_client.is_alias_same(product_alias, search_alias) == expected_answer
+
 
 def test_corex_client_product_type_detection1(base_corex_client):
 
