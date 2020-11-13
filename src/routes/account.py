@@ -86,6 +86,36 @@ def transfer_money_to_beneficiary():
         "operation_success": True
         }
 
+@account.route('/transfermoneybetweenownaccounts', methods=['POST'])
+def transfer_money_between_own_accounts():
+
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    transfer_petition = request.json
+
+    transfer_transaction = corex_client.transfer_money_between_own_accounts(transfer_petition)
+
+    if (transfer_transaction["success"] != True):
+        content =  {
+            
+            "message": transfer_transaction["message"],
+            "operation_success": False
+        }
+
+        return content, 400
+    
+    key_number = transfer_transaction["keyNumber"]
+
+
+    
+    return {
+        "status": "OK",
+        "message": "Favor indique su clave #%s" % key_number,
+        "keyNumber": key_number,
+        "current_operation_id": transfer_transaction["rowUiDTransaction"],
+        "operation_success": True
+        }
+
+
 @account.route('/completetransfertobeneficiary', methods=['POST'])
 def complete_transfer_to_beneficiary():
 
