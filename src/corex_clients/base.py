@@ -13,9 +13,10 @@ class CoreXClient:
         "CreditCard": 2
     }
 
-    def __init__(self, api_url, client_id):
+    def __init__(self, api_url, client_id, auth_header):
         self.api_url = api_url
         self.client_id = client_id
+        self.auth_header = auth_header
 
 
     def account_exists(self, products, alias):
