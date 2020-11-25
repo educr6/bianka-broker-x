@@ -192,7 +192,7 @@ class CreditCardsCoreXClient (CoreXClient):
             }
         
         amount = 0
-        if (transfer_petition["TotalOrMinimum"] == "Total"):
+        if (transfer_petition["TotalOrMinimum"] == "Total" or transfer_petition["TotalOrMinimum"] == "total"):
             
             amount = self.get_credit_card_cut_payment(transfer_petition["creditCardAlias"])
         else:
