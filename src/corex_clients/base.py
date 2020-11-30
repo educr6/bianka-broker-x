@@ -65,7 +65,7 @@ class CoreXClient:
 
         
         url = self.api_url + '/api/historical-transaction/product/%s' % str(product["productId"])
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return []

@@ -128,7 +128,7 @@ def get_credit_card_minimum_payment():
 
     return {
         "status": "OK",
-        "message": "El pago minimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
+        "message": "El pago mínimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
         "operation success": True}
 
 
