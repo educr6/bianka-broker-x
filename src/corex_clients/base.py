@@ -78,6 +78,8 @@ class CoreXClient:
 
         beneficiary_list = self.get_beneficiary_list()
 
+        print ("beneficiary list", beneficiary_list)
+
         if (beneficiary_list == []):
             return {}
         
@@ -94,8 +96,8 @@ class CoreXClient:
 
     def get_beneficiary_list(self):
         
-        url = self.api_url + "/api/beneficiary/client/%s" % str(self.client_id)
-        response = requests.get(url, verify=False)
+        url = self.api_url + "/api/beneficiary/client"
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
       
 
