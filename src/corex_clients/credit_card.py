@@ -1,9 +1,11 @@
 from .base import CoreXClient
+from .account import AccountsCoreXClient
 from src.phrase_builders import transactions as transphraseBuilder
 from datetime import datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 import requests
+import json
 
 
 class CreditCardsCoreXClient (CoreXClient):
@@ -11,8 +13,9 @@ class CreditCardsCoreXClient (CoreXClient):
     #private variables
     _product_type = '2'
 
-    def __init__(self, api_url, client_id):
-        super(CreditCardsCoreXClient, self).__init__(api_url, client_id)
+    def __init__(self, api_url, client_id, auth_header):
+        super(CreditCardsCoreXClient, self).__init__(api_url, client_id, auth_header)
+      
 
 
     def get_credit_card_limit(self, alias):
@@ -45,6 +48,18 @@ class CreditCardsCoreXClient (CoreXClient):
             currentDate = datetime.now()
             newCutDate = self.get_cut_date(dt_object, daysLimitPayment,  currentDate)
             return (newCutDate - currentDate).days
+
+    
+    def get_credit_card_by_alias(self, alias):
+        
+        cards = self.get_credit_cards_from_client()
+
+        
+        if (self.account_exists(cards, alias) == False):
+            return None
+        
+        card = self.select_product_by_alias(cards, alias)
+        return card
 
 
     def get_cut_date(self, cutDate, daysLimitPayment, currentDate):
@@ -121,7 +136,7 @@ class CreditCardsCoreXClient (CoreXClient):
     def get_credit_card_data(self, product):
 
         url = self.api_url + "/api/credit-card/" + str(product['productId'])
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return {}
@@ -132,14 +147,14 @@ class CreditCardsCoreXClient (CoreXClient):
 
     def get_credit_cards_from_client(self):
 
-        url = self.api_url + '/api/product/client/' + str(self.client_id) + '/product-type/' + self._product_type
-        response = requests.get( url, verify=False)
+        url = self.api_url + '/api/client/'
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return []
 
         response = self.read_response(response)
-        return response
+        return response["products"]
 
 
     
@@ -155,3 +170,66 @@ class CreditCardsCoreXClient (CoreXClient):
 
         transactions = self.get_product_transactions(card)
         return transactions
+    
+
+    def pay_credit_card(self, transfer_petition):
+
+        credit_card = self.get_credit_card_by_alias(transfer_petition["creditCardAlias"])
+
+        if (credit_card == None):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus tarjetas para pagar la titulada %s" % transfer_petition["creditCardAlias"]
+            }
+        
+        account = AccountsCoreXClient(self.api_url, self.client_id, self.auth_header).get_account_by_alias(transfer_petition["accountAlias"])
+        
+
+        if (account == None):
+            return {
+                "success":  False,
+                "message": "No pudimos encontrar entre sus cuentas la titulada a %s" % transfer_petition["accountAlias"]
+            }
+        
+        amount = 0
+        if (transfer_petition["TotalOrMinimum"] == "Total" or transfer_petition["TotalOrMinimum"] == "total"):
+            
+            amount = self.get_credit_card_cut_payment(transfer_petition["creditCardAlias"])
+        else:
+            amount = self.get_credit_card_minimum_payment(transfer_petition["creditCardAlias"])
+
+        
+       
+        data = {
+            "productSourceId": account["productId"],
+            "productTargetId": credit_card["productId"],
+            "amount": amount,
+            "note": "Esta transferencia se hizo a traves de Bianka"
+        }
+
+        url = self.api_url + "/api/transaction"
+
+        print(data)
+        header = {"Content-Type": "application/json"}
+        header.update(self.auth_header)
+        print (header)
+
+        response = requests.post(url, data=json.dumps(data), headers=header, verify=False)
+
+
+        if (response.status_code != 200) :
+            
+            print("This is the response", response.content)
+
+            return {
+                "success": False,
+                "message": "Hubo un error al intentar la transaccion"
+            }
+        
+
+        response = self.read_response(response)
+
+        result = {"success": True, "message": "Transaccion sometida"}
+        result.update(response)
+
+        return result

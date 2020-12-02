@@ -16,7 +16,7 @@ credit_card = Blueprint('credit_card', __name__)
 def get_credit_card_limit():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     limit = corex_client.get_credit_card_limit(alias)
 
     if (limit == None):
@@ -38,7 +38,7 @@ def get_credit_card_limit():
 def getmissingdays():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     missing_days = corex_client.get_missing_days(alias)
 
     if (missing_days == None):
@@ -67,7 +67,7 @@ def getmissingdays():
 def get_credit_card_available_credit():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     available_credit = corex_client.get_credit_card_available_credit(alias)
 
     if (available_credit == None):
@@ -91,7 +91,7 @@ def get_credit_card_available_credit():
 def get_credit_card_consumed_credit():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     consumed_credit = corex_client.get_credit_card_consumed_credit(alias)
 
     if (consumed_credit == None):
@@ -114,7 +114,7 @@ def get_credit_card_consumed_credit():
 def get_credit_card_minimum_payment():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     minimum_payment = corex_client.get_credit_card_minimum_payment(alias)
 
     if (minimum_payment == None):
@@ -128,7 +128,7 @@ def get_credit_card_minimum_payment():
 
     return {
         "status": "OK",
-        "message": "El pago minimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
+        "message": "El pago mínimo de su tarjeta de crédito %s es de %s pesos" % (alias, minimum_payment),
         "operation success": True}
 
 
@@ -137,7 +137,7 @@ def get_credit_card_minimum_payment():
 def get_credit_card_cut_payment():
 
     alias = request.args.get('alias')
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     cut_payment = corex_client.get_credit_card_cut_payment(alias)
 
 
@@ -162,7 +162,7 @@ def get_credit_card_transactions():
 
     alias = request.args.get('alias')
     number_of_transactions = int(request.args.get('numberoftransactions'))
-    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     transactions = corex_client.get_credit_card_transactions(alias)
 
    
@@ -183,6 +183,39 @@ def get_credit_card_transactions():
         "message": message,
         "operation success": True
         }
+
+@credit_card.route('/paycreditcard', methods=['POST'])
+def pay_credit_card():
+
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
+    transfer_petition = request.json
+
+    transfer_transaction = corex_client.pay_credit_card(transfer_petition)
+
+    if (transfer_transaction["success"] != True):
+        content =  {
+            
+            "message": transfer_transaction["message"],
+            "operation_success": False
+        }
+
+        return content, 400
+    
+    key_number = transfer_transaction["keyNumber"]
+
+
+    
+    return {
+        "status": "OK",
+        "message": "Favor indique su clave #%s" % key_number,
+        "keyNumber": key_number,
+        "current_operation_id": transfer_transaction["rowUiDTransaction"],
+        "operation_success": True
+        }
+    
+
+
+    
 
 
         

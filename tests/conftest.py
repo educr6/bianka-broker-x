@@ -25,12 +25,12 @@ def client(app):
 
 @pytest.fixture
 def base_corex_client(app):
-    return CoreXClient(app.config['COREX_BASE_URL'], 2)
+    return CoreXClient(app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (app.config['AUTH_HEADER_TYPE'], app.config['AUTH_HEADER_VALUE'])})
 
 @pytest.fixture
 def account_corex_client(app):
-    return AccountsCoreXClient(app.config['COREX_BASE_URL'], 2)
+    return AccountsCoreXClient(app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (app.config['AUTH_HEADER_TYPE'], app.config['AUTH_HEADER_VALUE'])})
 
 @pytest.fixture
 def credit_card_corex_client(app):
-    return CreditCardsCoreXClient(app.config['COREX_BASE_URL'], 2)
+    return CreditCardsCoreXClient(app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (app.config['AUTH_HEADER_TYPE'], app.config['AUTH_HEADER_VALUE'])})
