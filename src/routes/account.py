@@ -13,7 +13,7 @@ account = Blueprint('account', __name__)
 def get_accout_balance():
 
     alias = request.args.get('alias')
-    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     monto = corex_client.get_balance_of_account(alias)
 
     if (monto == None):
@@ -35,7 +35,7 @@ def get_account_transactions():
 
     alias = request.args.get('alias')
     number_of_transactions = int(request.args.get('numberoftransactions'))
-    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     transactions = corex_client.get_account_transactions(alias)
 
    
@@ -60,7 +60,7 @@ def get_account_transactions():
 @account.route('/transfermoneytobeneficiary', methods=['POST'])
 def transfer_money_to_beneficiary():
 
-    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     transfer_petition = request.json
 
     transfer_transaction = corex_client.transfer_money_to_beneficiary(transfer_petition)
@@ -89,7 +89,7 @@ def transfer_money_to_beneficiary():
 @account.route('/transfermoneybetweenownaccounts', methods=['POST'])
 def transfer_money_between_own_accounts():
 
-    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     transfer_petition = request.json
 
     transfer_transaction = corex_client.transfer_money_between_own_accounts(transfer_petition)
@@ -119,7 +119,7 @@ def transfer_money_between_own_accounts():
 @account.route('/completetransfertobeneficiary', methods=['POST'])
 def complete_transfer_to_beneficiary():
 
-    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    corex_client = AccountsCoreXClient(current_app.config['COREX_BASE_URL'], 2, {"Authorization": "%s %s" % (current_app.config['AUTH_HEADER_TYPE'], current_app.config['AUTH_HEADER_VALUE'])})
     complete_transfer_petition = request.json
 
     complete_transfer_petition = corex_client.complete_transfer_to_beneficiary(complete_transfer_petition)

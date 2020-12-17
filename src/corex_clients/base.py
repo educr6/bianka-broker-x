@@ -13,9 +13,10 @@ class CoreXClient:
         "CreditCard": 2
     }
 
-    def __init__(self, api_url, client_id):
+    def __init__(self, api_url, client_id, auth_header):
         self.api_url = api_url
         self.client_id = client_id
+        self.auth_header = auth_header
 
 
     def account_exists(self, products, alias):
@@ -64,7 +65,7 @@ class CoreXClient:
 
         
         url = self.api_url + '/api/historical-transaction/product/%s' % str(product["productId"])
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return []
@@ -76,6 +77,8 @@ class CoreXClient:
     def get_beneficiary_product(self, beneficiary_alias):
 
         beneficiary_list = self.get_beneficiary_list()
+
+        print ("beneficiary list", beneficiary_list)
 
         if (beneficiary_list == []):
             return {}
@@ -93,8 +96,8 @@ class CoreXClient:
 
     def get_beneficiary_list(self):
         
-        url = self.api_url + "/api/beneficiary/client/%s" % str(self.client_id)
-        response = requests.get(url, verify=False)
+        url = self.api_url + "/api/beneficiary/client"
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
       
 

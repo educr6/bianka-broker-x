@@ -7,8 +7,8 @@ class AccountsCoreXClient (CoreXClient):
     #private variables
     _product_type = '1'
 
-    def __init__(self, api_url, client_id):
-        super(AccountsCoreXClient, self).__init__(api_url, client_id)
+    def __init__(self, api_url, client_id, auth_header):
+        super(AccountsCoreXClient, self).__init__(api_url, client_id, auth_header)
     
 
     def get_balance_of_account(self, alias):
@@ -18,29 +18,33 @@ class AccountsCoreXClient (CoreXClient):
         if (self.account_exists(accounts, alias) == False):
             return None
         
+        
         product = self.select_product_by_alias(accounts, alias)
         account_data = self.get_account_data(product)
+
+        if (account_data == {}):
+            return None
 
         return account_data['amount']
     
 
     def get_accounts_from_client(self):
 
-        url = self.api_url + '/api/product/client/' + str(self.client_id) + '/product-type/' + str(self._product_type)
-        response = requests.get( url, verify=False)
+        url = self.api_url + '/api/client'
+        response = requests.get( url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return []
 
         response = self.read_response(response)
-        return response
+        return response["products"]
 
 
     
     def get_account_data(self, product):
 
         url = self.api_url + "/api/savings-account/" + str(product['productId'])
-        response = requests.get(url, verify=False)
+        response = requests.get(url, verify=False, headers=self.auth_header)
 
         if (response.status_code != 200):
             return {}
@@ -100,8 +104,10 @@ class AccountsCoreXClient (CoreXClient):
         }
 
         url = self.api_url + "/api/transaction"
+        header = {"Content-Type": "application/json"}
+        header.update(self.auth_header)
 
-        response = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"}, verify=False)
+        response = requests.post(url, data=json.dumps(data), headers=header, verify=False)
 
 
         if (response.status_code != 200) :
@@ -147,8 +153,10 @@ class AccountsCoreXClient (CoreXClient):
         }
 
         url = self.api_url + "/api/transaction"
+        header = {"Content-Type": "application/json"}
+        header.update(self.auth_header)
 
-        response = requests.post(url, data=json.dumps(data), headers={"Content-Type": "application/json"}, verify=False)
+        response = requests.post(url, data=json.dumps(data), headers=header, verify=False)
 
 
         if (response.status_code != 200) :
@@ -172,7 +180,7 @@ class AccountsCoreXClient (CoreXClient):
         key = complete_transfer_petition["key"]
 
         url = self.api_url + "/api/transaction/rowuid/%s/key/%s" % (operation_id, key)
-        response = requests.post(url, data={}, verify=False)
+        response = requests.post(url, data={}, verify=False, headers=self.auth_header)
 
         response_content = self.read_response(response)
 
