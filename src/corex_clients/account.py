@@ -18,8 +18,12 @@ class AccountsCoreXClient (CoreXClient):
         if (self.account_exists(accounts, alias) == False):
             return None
         
+        
         product = self.select_product_by_alias(accounts, alias)
         account_data = self.get_account_data(product)
+
+        if (account_data == {}):
+            return None
 
         return account_data['amount']
     
