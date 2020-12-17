@@ -4,6 +4,7 @@ from datetime import datetime
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 import requests
+import datetime
 
 
 class CreditCardsCoreXClient (CoreXClient):
@@ -40,9 +41,9 @@ class CreditCardsCoreXClient (CoreXClient):
             daysLimitPayment = credit_card_data['daysLimitPayment']
 
             date_string = cutDate.split('T')[0]
-            dt_object = datetime.strptime(date_string, '%Y-%m-%d')
+            dt_object = datetime.datetime.strptime(date_string, '%Y-%m-%d')
             
-            currentDate = datetime.now()
+            currentDate = datetime.datetime.now()
             newCutDate = self.get_cut_date(dt_object, daysLimitPayment,  currentDate)
             return (newCutDate - currentDate).days
 
@@ -155,3 +156,87 @@ class CreditCardsCoreXClient (CoreXClient):
 
         transactions = self.get_product_transactions(card)
         return transactions
+
+    def get_credit_card_cut_day (self, alias):
+        accounts = self.get_credit_cards_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        product = self.select_product_by_alias(accounts, alias)
+        credit_card_data = self.get_credit_card_data(product)
+
+        strCutDate = credit_card_data['cutDate']
+            
+        cutDate = datetime.datetime.strptime(strCutDate, "%Y-%m-%dT%H:%M:%S")
+
+        todayDate = datetime.datetime.today()
+
+        newCutDate = datetime.datetime.today()
+
+        if(cutDate.day >= todayDate.day):
+            newCutDate = datetime.datetime.date(todayDate.year, todayDate.month, cutDate.day)
+        else:
+            year = todayDate.year
+            month = todayDate.month
+            
+            if(month == 12):
+                year = year + 1
+                month = 1
+            else:
+                month = month + 1
+            
+            newCutDate = datetime.date(year, month, cutDate.day)
+            string_date = self.get_string_date(newCutDate)
+
+        return string_date
+        
+
+    def get_credit_card_days_left_to_pay (self, alias):
+        accounts = self.get_credit_cards_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        product = self.select_product_by_alias(accounts, alias)
+        credit_card_data = self.get_credit_card_data(product)
+
+        return credit_card_data['daysLimitPayment']
+
+    
+    def get_credit_card_payment_limit_date (self, alias):
+        accounts = self.get_credit_cards_from_client()
+
+        if (self.account_exists(accounts, alias) == False):
+            return None
+        
+        product = self.select_product_by_alias(accounts, alias)
+        credit_card_data = self.get_credit_card_data(product)
+
+        daysLimitPayment = credit_card_data['daysLimitPayment']
+
+        today = datetime.datetime.today()
+
+        paymentLimitDate = today + datetime.timedelta(days=daysLimitPayment)
+
+        # Que la fecha sea un string que diga ejemplo: 7 de diciembre del 2020
+
+        string_date = self.get_string_date(datetime.date(paymentLimitDate.year, paymentLimitDate.month, paymentLimitDate.day))
+
+        return string_date
+
+    
+    
+    
+    def get_string_date(self,date):
+        
+        spanish_months = ["enero", "febrero", "marzo" , "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+
+        string_date = str(date.day) +  ' de ' + spanish_months[int(date.month) - 1] + ' del ' + str(date.year)
+
+        return string_date
+
+
+
+    
+    

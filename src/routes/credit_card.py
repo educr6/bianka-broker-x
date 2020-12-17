@@ -184,6 +184,75 @@ def get_credit_card_transactions():
         "operation success": True
         }
 
+@credit_card.route('/getcreditcardcutday')
+def get_credit_card_cut_day():
 
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    cut_day = corex_client.get_credit_card_cut_day(alias)
+
+
+    if (cut_day == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+    return {
+        "status": "OK",
+        "message": "La fecha proxima fecha de corte de su tarjeta de credito %s es el %s" % (alias, cut_day),
+        "operation success": True
+        }
+
+@credit_card.route('/getcreditcardpaymentlimitdate')
+def get_credit_card_payment_limit_date():
+
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    limit_day = corex_client.get_credit_card_payment_limit_date(alias)
+
+
+    if (limit_day == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+    return {
+        "status": "OK",
+        "message": "La fecha limite para el pago de la tarjeta de credito %s es el %s" % (alias, limit_day),
+        "operation success": True
+        }
+
+
+
+@credit_card.route('/getcreditcarddayslefttopay')
+def get_credit_card_days_left_to_pay():
+
+    alias = request.args.get('alias')
+    corex_client = CreditCardsCoreXClient(current_app.config['COREX_BASE_URL'], 2)
+    days_limit_payment = corex_client.get_credit_card_days_left_to_pay(alias)
+
+
+    if (days_limit_payment == None):
+        content =  {
+            "status": "BAD REQUEST",
+            "message": "No pudimos encontrar su tarjeta titulada %s" % alias,
+            "operation success": False
+        }
+
+        return content, 400
+
+    return {
+        "status": "OK",
+        "message": "Dispone de %s dias para pagar la tarjeta de credito %s" % (days_limit_payment, alias),
+        "operation success": True
+        }
         
     
