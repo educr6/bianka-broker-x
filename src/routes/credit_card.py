@@ -232,7 +232,7 @@ def get_credit_card_cut_day():
 
     return {
         "status": "OK",
-        "message": "La fecha proxima fecha de corte de su tarjeta de credito %s es el %s" % (alias, cut_day),
+        "message": "La fecha próxima de corte de su tarjeta de credito %s es el %s" % (alias, cut_day),
         "operation success": True
     }
 
