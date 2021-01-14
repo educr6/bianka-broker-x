@@ -30,7 +30,7 @@ def get_credit_card_limit():
 
     return {
         "status": "OK",
-        "message": "El limite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
+        "message": "El límite de su tarjeta de crédito %s es de %s pesos" % (alias, limit),
         "operation success": True}
 
 
@@ -54,7 +54,7 @@ def getmissingdays():
     if (missing_days == 1):
         speak_output = "A usted le falta  solo un día para pagar su tarjeta de crédito %s" % alias
     else:
-        speak_output = "A usted le faltan %s dias para pagar su tarjeta de credito %s" % (
+        speak_output = "A usted le faltan %s dias para pagar su tarjeta de crédito %s" % (
             missing_days, alias)
 
     return {
@@ -82,7 +82,7 @@ def get_credit_card_available_credit():
 
     return {
         "status": "OK",
-        "message": "El credito disponible de su tarjeta de crédito %s es de %s pesos" % (alias, available_credit),
+        "message": "El crédito disponible de su tarjeta de crédito %s es de %s pesos" % (alias, available_credit),
         "operation success": True}
 
 
@@ -105,7 +105,7 @@ def get_credit_card_consumed_credit():
 
     return {
         "status": "OK",
-        "message": "El credito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
+        "message": "El crédito consumido de su tarjeta de crédito %s es de %s pesos" % (alias, consumed_credit),
         "operation success": True}
 
 
@@ -232,7 +232,7 @@ def get_credit_card_cut_day():
 
     return {
         "status": "OK",
-        "message": "La fecha proxima fecha de corte de su tarjeta de credito %s es el %s" % (alias, cut_day),
+        "message": "La fecha próxima de corte de su tarjeta de crédito %s es el %s" % (alias, cut_day),
         "operation success": True
     }
 
@@ -256,7 +256,7 @@ def get_credit_card_payment_limit_date():
 
     return {
         "status": "OK",
-        "message": "La fecha limite para el pago de la tarjeta de credito %s es el %s" % (alias, limit_day),
+        "message": "La fecha límite para el pago de la tarjeta de crédito %s es el %s" % (alias, limit_day),
         "operation success": True
     }
 
@@ -280,6 +280,6 @@ def get_credit_card_days_left_to_pay():
 
     return {
         "status": "OK",
-        "message": "Dispone de %s dias para pagar la tarjeta de credito %s" % (days_limit_payment, alias),
+        "message": "Dispone de %s dias para pagar la tarjeta de crédito %s" % (days_limit_payment, alias),
         "operation success": True
     }
